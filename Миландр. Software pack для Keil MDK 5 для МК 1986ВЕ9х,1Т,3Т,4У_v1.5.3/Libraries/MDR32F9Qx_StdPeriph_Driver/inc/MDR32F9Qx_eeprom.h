@@ -36,14 +36,18 @@ extern "C" {
   * @{
   */
 
-#define EEPROM_Latency_0                ((uint32_t)0x00000000)  /*!< EEPROM 0 Latency cycle  (MCU Clock up to  25 MHz) */
-#define EEPROM_Latency_1                ((uint32_t)0x00000008)  /*!< EEPROM 1 Latency cycle  (MCU Clock up to  50 MHz) */
-#define EEPROM_Latency_2                ((uint32_t)0x00000010)  /*!< EEPROM 2 Latency cycles (MCU Clock up to  75 MHz) */
-#define EEPROM_Latency_3                ((uint32_t)0x00000018)  /*!< EEPROM 3 Latency cycles (MCU Clock up to 100 MHz) */
-#define EEPROM_Latency_4                ((uint32_t)0x00000020)  /*!< EEPROM 4 Latency cycles (MCU Clock up to 125 MHz) */
-#define EEPROM_Latency_5                ((uint32_t)0x00000028)  /*!< EEPROM 5 Latency cycles (MCU Clock up to 150 MHz) */
-#define EEPROM_Latency_6                ((uint32_t)0x00000030)  /*!< EEPROM 6 Latency cycles (MCU Clock up to 175 MHz) */
-#define EEPROM_Latency_7                ((uint32_t)0x00000038)  /*!< EEPROM 7 Latency cycles (MCU Clock up to 200 MHz) */
+
+typedef enum
+{
+  EEPROM_Latency_0 = ((uint32_t)0x00000000),  /*!< EEPROM 0 Latency cycle  (MCU Clock up to  25 MHz) */
+  EEPROM_Latency_1 = ((uint32_t)0x00000008),  /*!< EEPROM 1 Latency cycle  (MCU Clock up to  50 MHz) */
+  EEPROM_Latency_2 = ((uint32_t)0x00000010),  /*!< EEPROM 2 Latency cycles (MCU Clock up to  75 MHz) */
+  EEPROM_Latency_3 = ((uint32_t)0x00000018),  /*!< EEPROM 3 Latency cycles (MCU Clock up to 100 MHz) */
+  EEPROM_Latency_4 = ((uint32_t)0x00000020),  /*!< EEPROM 4 Latency cycles (MCU Clock up to 125 MHz) */
+  EEPROM_Latency_5 = ((uint32_t)0x00000028),  /*!< EEPROM 5 Latency cycles (MCU Clock up to 150 MHz) */
+  EEPROM_Latency_6 = ((uint32_t)0x00000030),  /*!< EEPROM 6 Latency cycles (MCU Clock up to 175 MHz) */
+  EEPROM_Latency_7 = ((uint32_t)0x00000038)  /*!< EEPROM 7 Latency cycles (MCU Clock up to 200 MHz) */
+} //flashCoreSpeed;
 
 #define EEPROM_Latency_MSK      ((uint32_t)0x00000038)
 
@@ -55,9 +59,17 @@ extern "C" {
   * @{
   */
 
-#define EEPROM_Main_Bank_Select         ((uint32_t)0x00000000)  /*!< EEPROM Main Bank Selector */
-#define EEPROM_Info_Bank_Select         ((uint32_t)0x00000001)  /*!< EEPROM Information Bank Selector */
-#define EEPROM_All_Banks_Select         ((uint32_t)0x00000002)  /*!< EEPROM All Banks Selector */
+/* flash memory bank selector: Main memory (256K), Info memory (8K) or both */
+typedef enum
+{
+  EEPROM_Main_Bank_Select = ((uint32_t)0x00000000),  /*!< EEPROM Main Bank Selector */
+  EEPROM_Info_Bank_Select = ((uint32_t)0x00000001),  /*!< EEPROM Information Bank Selector */
+  EEPROM_All_Banks_Select = ((uint32_t)0x00000002)  /*!< EEPROM All Banks Selector */
+} flashMemBank;
+
+// #define EEPROM_Main_Bank_Select         ((uint32_t)0x00000000)  /*!< EEPROM Main Bank Selector */
+// #define EEPROM_Info_Bank_Select         ((uint32_t)0x00000001)  /*!< EEPROM Information Bank Selector */
+// #define EEPROM_All_Banks_Select         ((uint32_t)0x00000002)  /*!< EEPROM All Banks Selector */
 
 #define IS_EEPROM_BANK_SELECTOR(SEL)    (((SEL) == EEPROM_Main_Bank_Select) || \
                                          ((SEL) == EEPROM_Info_Bank_Select))
