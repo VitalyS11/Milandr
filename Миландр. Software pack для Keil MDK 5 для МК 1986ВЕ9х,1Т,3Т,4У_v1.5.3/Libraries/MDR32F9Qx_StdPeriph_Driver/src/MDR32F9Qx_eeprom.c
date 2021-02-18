@@ -70,7 +70,7 @@ __RAMFUNC static void ProgramDelay(uint32_t Loops)
   *            @arg EEPROM_Latency_7: EEPROM Seven Latency cycles
   * @retval None
   */
-void EEPROM_SetLatency ( uint32_t EEPROM_Latency )
+void EEPROM_SetLatency (EEPROM_Latency EEPROM_Latency)
 {
   /* Check the parameters */
   assert_param(IS_EEPROM_LATENCY(EEPROM_Latency));
@@ -88,7 +88,7 @@ void EEPROM_SetLatency ( uint32_t EEPROM_Latency )
   *           @arg EEPROM_Info_Bank_Select:      The EEPROM Information Bank selector.
   * @retval The selected EEPROM memory value.
   */
-__RAMFUNC  uint8_t EEPROM_ReadByte(uint32_t Address, uint32_t BankSelector)
+__RAMFUNC  uint8_t EEPROM_ReadByte(uint32_t Address, EEPROM_Memory_Bank BankSelector)
 {
   uint32_t Data;
   uint32_t Command;
@@ -124,7 +124,7 @@ __RAMFUNC  uint8_t EEPROM_ReadByte(uint32_t Address, uint32_t BankSelector)
   *           @arg EEPROM_Info_Bank_Select:      The EEPROM Information Bank selector.
   * @retval The selected EEPROM memory value.
   */
-__RAMFUNC uint16_t EEPROM_ReadHalfWord(uint32_t Address, uint32_t BankSelector)
+__RAMFUNC uint16_t EEPROM_ReadHalfWord(uint32_t Address, EEPROM_Memory_Bank BankSelector)
 {
   uint32_t Data;
   uint32_t Command;
@@ -161,7 +161,7 @@ __RAMFUNC uint16_t EEPROM_ReadHalfWord(uint32_t Address, uint32_t BankSelector)
   *           @arg EEPROM_Info_Bank_Select:      The EEPROM Information Bank selector.
   * @retval The selected EEPROM memory value.
   */
-__RAMFUNC uint32_t EEPROM_ReadWord(uint32_t Address, uint32_t BankSelector)
+__RAMFUNC uint32_t EEPROM_ReadWord(uint32_t Address, EEPROM_Memory_Bank BankSelector)
 {
   uint32_t Command;
   uint32_t Data;
@@ -194,7 +194,7 @@ __RAMFUNC uint32_t EEPROM_ReadWord(uint32_t Address, uint32_t BankSelector)
   *           @arg EEPROM_Info_Bank_Select:      The EEPROM Information Bank selector.
   * @retval None
   */
-__RAMFUNC void EEPROM_ErasePage(uint32_t Address, uint32_t BankSelector)
+__RAMFUNC void EEPROM_ErasePage(uint32_t Address, EEPROM_Memory_Bank BankSelector)
 {
   uint32_t Command;
   uint32_t Offset;
@@ -236,7 +236,7 @@ __RAMFUNC void EEPROM_ErasePage(uint32_t Address, uint32_t BankSelector)
   *           @arg EEPROM_All_Banks_Select:      The EEPROM All Banks selector.
   * @retval None
   */
-__RAMFUNC void EEPROM_EraseAllPages(uint32_t BankSelector)
+__RAMFUNC void EEPROM_EraseAllPages(EEPROM_Memory_Bank BankSelector)
 {
   uint32_t Command;
   uint32_t Offset;
@@ -281,7 +281,7 @@ __RAMFUNC void EEPROM_EraseAllPages(uint32_t BankSelector)
   * @param  Data: The data value to be programmed.
   * @retval None
   */
-__RAMFUNC void EEPROM_ProgramByte(uint32_t Address, uint32_t BankSelector, uint32_t Data)
+__RAMFUNC void EEPROM_ProgramByte(uint32_t Address, EEPROM_Memory_Bank BankSelector, uint32_t Data)
 {
   uint32_t Mask;
   uint32_t Tmp;
@@ -306,7 +306,7 @@ __RAMFUNC void EEPROM_ProgramByte(uint32_t Address, uint32_t BankSelector, uint3
   * @param  Data: The data value to be programmed.
   * @retval None
   */
-__RAMFUNC void EEPROM_ProgramHalfWord(uint32_t Address, uint32_t BankSelector, uint32_t Data)
+__RAMFUNC void EEPROM_ProgramHalfWord(uint32_t Address, EEPROM_Memory_Bank BankSelector, uint32_t Data)
 {
   uint32_t Mask;
   uint32_t Tmp;
@@ -332,7 +332,7 @@ __RAMFUNC void EEPROM_ProgramHalfWord(uint32_t Address, uint32_t BankSelector, u
   * @param  Data: The data value to be programmed.
   * @retval None
   */
-__RAMFUNC void EEPROM_ProgramWord(uint32_t Address, uint32_t BankSelector, uint32_t Data)
+__RAMFUNC void EEPROM_ProgramWord(uint32_t Address, EEPROM_Memory_Bank BankSelector, uint32_t Data)
 {
   uint32_t Command;
 
@@ -340,9 +340,9 @@ __RAMFUNC void EEPROM_ProgramWord(uint32_t Address, uint32_t BankSelector, uint3
   assert_param(IS_FOUR_BYTE_ALLIGNED(Address));
 
   MDR_EEPROM->KEY = EEPROM_REG_ACCESS_KEY;
-  BankSelector = (BankSelector == EEPROM_Info_Bank_Select) ? EEPROM_CMD_IFREN : 0;
-  Command = MDR_EEPROM->CMD & EEPROM_CMD_DELAY_Msk;
-  Command |= EEPROM_CMD_CON | BankSelector;
+  Command = (MDR_EEPROM->CMD & EEPROM_CMD_DELAY_Msk) | EEPROM_CMD_CON;
+  Command |= (BankSelector == EEPROM_Info_Bank_Select) ? EEPROM_CMD_IFREN : 0;
+  
   MDR_EEPROM->CMD = Command;
   MDR_EEPROM->ADR = Address;
   MDR_EEPROM->DI  = Data;

@@ -39,15 +39,15 @@ extern "C" {
 
 typedef enum
 {
-  EEPROM_Latency_0 = ((uint32_t)0x00000000),  /*!< EEPROM 0 Latency cycle  (MCU Clock up to  25 MHz) */
-  EEPROM_Latency_1 = ((uint32_t)0x00000008),  /*!< EEPROM 1 Latency cycle  (MCU Clock up to  50 MHz) */
-  EEPROM_Latency_2 = ((uint32_t)0x00000010),  /*!< EEPROM 2 Latency cycles (MCU Clock up to  75 MHz) */
-  EEPROM_Latency_3 = ((uint32_t)0x00000018),  /*!< EEPROM 3 Latency cycles (MCU Clock up to 100 MHz) */
-  EEPROM_Latency_4 = ((uint32_t)0x00000020),  /*!< EEPROM 4 Latency cycles (MCU Clock up to 125 MHz) */
-  EEPROM_Latency_5 = ((uint32_t)0x00000028),  /*!< EEPROM 5 Latency cycles (MCU Clock up to 150 MHz) */
-  EEPROM_Latency_6 = ((uint32_t)0x00000030),  /*!< EEPROM 6 Latency cycles (MCU Clock up to 175 MHz) */
-  EEPROM_Latency_7 = ((uint32_t)0x00000038)  /*!< EEPROM 7 Latency cycles (MCU Clock up to 200 MHz) */
-} //flashCoreSpeed;
+  EEPROM_Latency_0 = (uint32_t)0,         /*!< EEPROM 0 Latency cycle  (MCU Clock up to  25 MHz) */
+  EEPROM_Latency_1 = (uint32_t)(1 << 3),  /*!< EEPROM 1 Latency cycle  (MCU Clock up to  50 MHz) */
+  EEPROM_Latency_2 = (uint32_t)(2 << 3),  /*!< EEPROM 2 Latency cycles (MCU Clock up to  75 MHz) */
+  EEPROM_Latency_3 = (uint32_t)(3 << 3),  /*!< EEPROM 3 Latency cycles (MCU Clock up to 100 MHz) */
+  EEPROM_Latency_4 = (uint32_t)(4 << 3),  /*!< EEPROM 4 Latency cycles (MCU Clock up to 125 MHz) */
+  EEPROM_Latency_5 = (uint32_t)(5 << 3),  /*!< EEPROM 5 Latency cycles (MCU Clock up to 150 MHz) */
+  EEPROM_Latency_6 = (uint32_t)(6 << 3),  /*!< EEPROM 6 Latency cycles (MCU Clock up to 175 MHz) */
+  EEPROM_Latency_7 = (uint32_t)(7 << 3)   /*!< EEPROM 7 Latency cycles (MCU Clock up to 200 MHz) */
+} EEPROM_Latency;
 
 #define EEPROM_Latency_MSK      ((uint32_t)0x00000038)
 
@@ -65,7 +65,7 @@ typedef enum
   EEPROM_Main_Bank_Select = ((uint32_t)0x00000000),  /*!< EEPROM Main Bank Selector */
   EEPROM_Info_Bank_Select = ((uint32_t)0x00000001),  /*!< EEPROM Information Bank Selector */
   EEPROM_All_Banks_Select = ((uint32_t)0x00000002)  /*!< EEPROM All Banks Selector */
-} flashMemBank;
+} EEPROM_Memory_Bank;
 
 // #define EEPROM_Main_Bank_Select         ((uint32_t)0x00000000)  /*!< EEPROM Main Bank Selector */
 // #define EEPROM_Info_Bank_Select         ((uint32_t)0x00000001)  /*!< EEPROM Information Bank Selector */
@@ -111,16 +111,16 @@ typedef enum
  #define __RAMFUNC
 #endif
 
-void EEPROM_SetLatency ( uint32_t EEPROM_Latency );
+void EEPROM_SetLatency ( EEPROM_Latency EEPROM_Latency );
 
-__RAMFUNC uint8_t EEPROM_ReadByte (uint32_t Address, uint32_t BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC uint16_t EEPROM_ReadHalfWord(uint32_t Address, uint32_t BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC uint32_t EEPROM_ReadWord(uint32_t Address, uint32_t BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC void EEPROM_ErasePage(uint32_t Address, uint32_t BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC void EEPROM_EraseAllPages(uint32_t BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC void EEPROM_ProgramByte(uint32_t Address, uint32_t BankSelector, uint32_t Data) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC void EEPROM_ProgramHalfWord(uint32_t Address, uint32_t BankSelector, uint32_t Data) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
-__RAMFUNC void EEPROM_ProgramWord(uint32_t Address, uint32_t BankSelector, uint32_t Data) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC uint8_t EEPROM_ReadByte (uint32_t Address, EEPROM_Memory_Bank BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC uint16_t EEPROM_ReadHalfWord(uint32_t Address, EEPROM_Memory_Bank BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC uint32_t EEPROM_ReadWord(uint32_t Address, EEPROM_Memory_Bank BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC void EEPROM_ErasePage(uint32_t Address, EEPROM_Memory_Bank BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC void EEPROM_EraseAllPages(EEPROM_Memory_Bank BankSelector) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC void EEPROM_ProgramByte(uint32_t Address, EEPROM_Memory_Bank BankSelector, uint32_t Data) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC void EEPROM_ProgramHalfWord(uint32_t Address, EEPROM_Memory_Bank BankSelector, uint32_t Data) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
+__RAMFUNC void EEPROM_ProgramWord(uint32_t Address, EEPROM_Memory_Bank BankSelector, uint32_t Data) __attribute__((section("EXECUTABLE_MEMORY_SECTION")));
 
 /** @} */ /* End of group EEPROM_Functions_not_allowed_to_be_located_in_Flash */
 
